@@ -1,0 +1,163 @@
+<div class="w-full min-h-screen relative m-0">
+  <section class="w-full h-60 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 absolute top-0 left-0"></section>
+  <section class="max-w-xl mx-auto pt-7 relative">
+    <div class="text-white">
+      <h1 class="text-3xl font-bold">My day</h1>
+      <p>All my tasks in one place</p>
+    </div>
+    <div class="my-4 w-full py-4 px-5 bg-white rounded-lg mt-4">
+      <input [formControl]="newTaskCtrl" (keyup.enter)="addTask($event)" class="border-0 outline-0 w-full italic" placeholder="Type new todo" type="text" name="list" id="list">
+    </div>
+    <article class="bg-white w-full rounded-lg shadow-md mb-4">
+      <ul class="min-h-3">
+        <!-- <ng-container *ngFor="let task of tasks; index as i">
+          <ng-container *ngIf="selectedList === 'all' || (selectedList !== 'all' && task.completed === selectedListObject[selectedList])">
+            <li (dblclick)="editTasktState(task.id, i)" class="py-1 px-3 border-b border-gray-200 last:border-0">
+              <div class="flex gap-1 items-center relative">
+                <ng-container *ngIf="task.editing else viewTask">
+                  <div class="flex gap-4 items-center w-full py-2 px-1">
+                    <span class="text-xs text-gray-500 text-center">Edit:</span>
+                    <input class="pb-1 outline-none border-b border-blue-950 text-sm w-full" type="text" (keyup.enter)="updateTask(task.id, i, tasks[i].task)" [(ngModel)]="tasks[i].task">
+                    <button class="py-1 px-4 border border-purple-700  text-purple-700 cursor-pointer rounded-md text-xs uppercase" (click)="updateTask(task.id, i, tasks[i].task)">Guardar</button>
+                  </div>
+                </ng-container>
+                <ng-template #viewTask>
+                  <label [attr.for]="task.id" class="flex items-center cursor-pointer select-none text-dark dark:text-white">
+                    <div class="relative">
+                      <input
+                        type="checkbox"
+                        [attr.id]="task.id"
+                        class="peer sr-only"
+                        [checked]="task.completed"
+                        (change)="toggleCompletedTask(task.id, i)"
+                        />
+
+                      <div class="block h-8 rounded-full bg-white dark:bg-dark-2 w-8"></div>
+                      <div class="border border-gray-300 absolute flex items-center justify-center w-6 h-6 transition bg-white
+                      rounded-full dot dark:bg-dark-5 left-1 top-1 peer-checked:border-lime-300">
+                      </div>
+                      <span class="hidden w-6 h-6 left-1 top-1 items-center justify-center absolute peer-checked:flex">
+                        <svg
+                          width="11"
+                          height="8"
+                          viewBox="0 0 11 8"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                          >
+                          <path class="fill-lime-500 stroke-lime-500"
+                              d="M10.0915 0.951972L10.0867 0.946075L10.0813 0.940568C9.90076 0.753564 9.61034 0.753146 9.42927 0.939309L4.16201 6.22962L1.58507 3.63469C1.40401 3.44841 1.11351 3.44879 0.932892 3.63584C0.755703 3.81933 0.755703 4.10875 0.932892 4.29224L0.932878 4.29225L0.934851 4.29424L3.58046 6.95832C3.73676 7.11955 3.94983 7.2 4.1473 7.2C4.36196 7.2 4.55963 7.11773 4.71406 6.9584L10.0468 1.60234C10.2436 1.4199 10.2421 1.1339 10.0915 0.951972ZM4.2327 6.30081L4.2317 6.2998C4.23206 6.30015 4.23237 6.30049 4.23269 6.30082L4.2327 6.30081Z"
+                              stroke-width="0.4"
+                              />
+                        </svg>
+                    </span>
+                    </div>
+                  </label>
+                  <label class="text-sm">{{task.task}}</label>
+                  <button (click)="removeTask(task.id)" class="text-base absolute right-0 text-gray-200 w-7 hover:text-gray-500 transition">x</button>
+                </ng-template>
+              </div>
+            </li>
+          </ng-container>
+        </ng-container> -->
+        <li *ngFor="let task of filterTask(); index as i" (dblclick)="editTasktState(task.id, i)" class="py-1 px-3 border-b border-gray-200 last:border-0">
+          <div class="flex gap-1 items-center relative">
+            <ng-container *ngIf="task.editing else viewTask">
+              <div class="flex gap-4 items-center w-full py-2 px-1">
+                <span class="text-xs text-gray-500 text-center">Edit:</span>
+                <input class="pb-1 outline-none border-b border-blue-950 text-sm w-full" type="text" (keyup.enter)="updateTask(task.id, i, tasks[i].task)" [(ngModel)]="tasks[i].task">
+                <button class="py-1 px-4 border border-purple-700  text-purple-700 cursor-pointer rounded-md text-xs uppercase" (click)="updateTask(task.id, i, tasks[i].task)">Guardar</button>
+              </div>
+            </ng-container>
+            <ng-template #viewTask>
+              <label [attr.for]="task.id" class="flex items-center cursor-pointer select-none text-dark dark:text-white">
+                <div class="relative">
+                  <input
+                    type="checkbox"
+                    [attr.id]="task.id"
+                    class="peer sr-only"
+                    [checked]="task.completed"
+                    (change)="toggleCompletedTask(task.id, i)"
+                    />
+
+                  <div class="block h-8 rounded-full bg-white dark:bg-dark-2 w-8"></div>
+                  <div class="border border-gray-300 absolute flex items-center justify-center w-6 h-6 transition bg-white
+                  rounded-full dot dark:bg-dark-5 left-1 top-1 peer-checked:border-lime-300">
+                  </div>
+                  <span class="hidden w-6 h-6 left-1 top-1 items-center justify-center absolute peer-checked:flex">
+                    <svg
+                      width="11"
+                      height="8"
+                      viewBox="0 0 11 8"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      >
+                      <path class="fill-lime-500 stroke-lime-500"
+                          d="M10.0915 0.951972L10.0867 0.946075L10.0813 0.940568C9.90076 0.753564 9.61034 0.753146 9.42927 0.939309L4.16201 6.22962L1.58507 3.63469C1.40401 3.44841 1.11351 3.44879 0.932892 3.63584C0.755703 3.81933 0.755703 4.10875 0.932892 4.29224L0.932878 4.29225L0.934851 4.29424L3.58046 6.95832C3.73676 7.11955 3.94983 7.2 4.1473 7.2C4.36196 7.2 4.55963 7.11773 4.71406 6.9584L10.0468 1.60234C10.2436 1.4199 10.2421 1.1339 10.0915 0.951972ZM4.2327 6.30081L4.2317 6.2998C4.23206 6.30015 4.23237 6.30049 4.23269 6.30082L4.2327 6.30081Z"
+                          stroke-width="0.4"
+                          />
+                    </svg>
+                </span>
+                </div>
+              </label>
+              <label class="text-sm">{{task.task}}</label>
+              <button (click)="removeTask(task.id)" class="text-base absolute right-0 text-gray-200 w-7 hover:text-gray-500 transition">x</button>
+            </ng-template>
+          </div>
+        </li>
+      </ul>
+      <div class="flex justify-between items-center py-2 px-4 border-t border-gray-300 mt-1">
+        <p class="text-xs">{{filterTask().length}} {{ filterTask().length !== 1 ? "items" : "item"}}</p>
+        <ul class="flex justify-end items-center">
+          <li>
+            <label class="cursor-pointer" for="all_option">
+              <input id="all_option" type="radio" class="peer sr-only" (change)="updateOptionTab(filters.all)" name="options_state" checked>
+              <p class="text-xs p-1 border-0 peer-checked:border">All</p>
+            </label>
+          </li>
+          <li>
+            <label class="cursor-pointer" for="complete_option">
+              <input id="complete_option" type="radio" class="peer sr-only" (change)="updateOptionTab(filters.completed)" name="options_state">
+              <p class="text-xs p-1 border-0 peer-checked:border">Complete</p>
+            </label>
+          </li>
+          <li>
+            <label class="cursor-pointer" for="pending_option">
+              <input id="pending_option" type="radio" class="peer sr-only" (change)="updateOptionTab(filters.pending)" name="options_state">
+              <p class="text-xs p-1 border-0 peer-checked:border">Pending</p>
+            </label>
+          </li>
+        </ul>
+      </div>
+    </article>
+    <article class="bg-white w-full rounded-lg shadow-md mb-4">
+      <div class="flex gap-3 items-center py-3 px-4">
+        <input type="color" [formControl]="colorCtrl">
+        <p>Color: {{colorCtrl.value}}</p>
+      </div>
+    </article>
+
+    <article class="bg-white w-full rounded-lg shadow-md">
+      <div class="py-3 px-4">
+        <pre>
+          <code class="font-mono text-xs">
+            {{ tasks | json}}
+          </code>
+        </pre>
+        <br>
+        <h6>Mi estado es: <b>{{selectedList()}}</b></h6>
+      </div>
+    </article>
+  </section>
+</div>
+
+<h1 class="text-3xl font-bold underline">
+  Hello world Tailwind!
+</h1>
+
+
+<hr>
+<!-- <ul>
+  <li *ngFor="let task1 of tasks()">
+    <span>{{task1}}</span>
+  </li>
+</ul> -->
